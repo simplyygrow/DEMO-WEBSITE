@@ -3,449 +3,380 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 
-window.addEventListener('error', (event) => {
-  console.warn('Caught error:', event.message);
-  event.preventDefault();
+gsap.registerPlugin(ScrollTrigger);
+
+const lenis = new Lenis({
+  duration: 1.2,
+  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  orientation: 'vertical',
+  gestureOrientation: 'vertical',
+  smoothWheel: true,
+  wheelMultiplier: 1,
+  touchMultiplier: 2,
+  infinite: false,
 });
 
-window.addEventListener('unhandledrejection', (event) => {
-  console.warn('Caught unhandled rejection:', event.reason);
-  event.preventDefault();
-});
+lenis.on('scroll', ScrollTrigger.update);
 
-let lenis;
+function raf(time) {
+  lenis.raf(time);
+  requestAnimationFrame(raf);
+}
 
-const initApp = () => {
-  if (typeof document === 'undefined') return;
+requestAnimationFrame(raf);
 
-  gsap.registerPlugin(ScrollTrigger);
+const init = () => {
+  initNav();
+  initHero();
+  initProduct();
+  initVariants();
+  initCraft();
+  initModal();
+  ScrollTrigger.refresh();
+};
 
-  lenis = new Lenis({
-    lerp: 0.08,
-    wheelMultiplier: 1,
-    infinite: false,
-    gestureOrientation: 'vertical',
-    normalizeWheel: true,
-    smoothWheel: true,
+/* ===== Nav ===== */
+const initNav = () => {
+  const nav = document.querySelector('.nav');
+  const toggle = document.getElementById('nav-toggle');
+  const links = document.querySelector('.nav-links');
+
+  if (!nav || !toggle || !links) return;
+
+  toggle.addEventListener('click', () => {
+    const isOpen = links.classList.toggle('open');
+    toggle.classList.toggle('active');
+    toggle.setAttribute('aria-expanded', isOpen);
   });
 
-  lenis.on('scroll', ScrollTrigger.update);
-
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  }
-
-  requestAnimationFrame(raf);
-
-  initHeroAnimations();
-  initProductRevealAnimations();
-  initEthosAnimations();
-  initDismantleAnimations();
-  initNavScroll();
-  initModal();
-
-  setTimeout(() => {
-    ScrollTrigger.refresh();
-  }, 200);
+  document.addEventListener('click', (e) => {
+    if (!nav.contains(e.target)) {
+      links.classList.remove('open');
+      toggle.classList.remove('active');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  });
 
   window.addEventListener('resize', () => {
-    ScrollTrigger.refresh();
+    if (window.innerWidth > 768) {
+      links.classList.remove('open');
+      toggle.classList.remove('active');
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  let lastScroll = 0;
+  let ticking = false;
+
+  lenis.on('scroll', ({ scroll }) => {
+    if (ticking) return;
+    ticking = true;
+
+    requestAnimationFrame(() => {
+      if (scroll <= 10) {
+        gsap.to(nav, { y: 0, duration: 0.3, ease: 'power2.out' });
+      } else if (scroll > lastScroll + 5) {
+        gsap.to(nav, { y: -100, duration: 0.25, ease: 'power2.out' });
+      } else if (scroll < lastScroll - 5) {
+        gsap.to(nav, { y: 0, duration: 0.25, ease: 'power2.out' });
+      }
+      lastScroll = scroll;
+      ticking = false;
+    });
   });
 };
 
-const initHeroAnimations = () => {
+/* ===== Hero ===== */
+const initHero = () => {
   const hero = document.querySelector('.hero');
-  const video = document.querySelector('.bg-video');
-  const frame = document.querySelector('.hero-frame');
-  const overline = document.querySelector('.hero-overline');
+  const video = document.querySelector('.hero-video');
+  const eyebrow = document.querySelector('.hero-eyebrow');
   const title = document.querySelector('.hero-title');
-  const scrollIndicator = document.querySelector('.hero-scroll-indicator');
   const subtitle = document.querySelector('.hero-subtitle');
-  const bgText = document.querySelector('.hero-text-bg');
-  const details = document.querySelector('.hero-details');
-  const bottomRail = document.querySelector('.hero-bottom-rail');
+  const scroll = document.querySelector('.hero-scroll');
+  const pills = document.querySelector('.hero-pills');
   const nav = document.querySelector('.nav');
 
-  if (!hero || !video || !frame || !details || !nav) {
-    console.warn('Hero elements missing, skipping hero animations');
-    return;
-  }
+  if (!hero || !video) return;
 
-  try {
-    gsap.set(video, { scale: 1.08, opacity: 0, force3D: true });
-    gsap.set(frame, { opacity: 0, force3D: true });
-    gsap.set(nav, { y: -30, opacity: 0, force3D: true });
-    gsap.set(bgText, { opacity: 0, y: 20, force3D: true });
-    gsap.set([overline, title, scrollIndicator, subtitle].filter(Boolean), { y: 40, opacity: 0, force3D: true });
-    gsap.set(bottomRail, { y: 25, opacity: 0, force3D: true });
+  gsap.set(video, { scale: 1.1, opacity: 0 });
+  gsap.set(nav, { y: -30, opacity: 0 });
+  gsap.set([eyebrow, title, subtitle, scroll].filter(Boolean), { y: 30, opacity: 0 });
+  gsap.set(pills, { y: 20, opacity: 0 });
 
-    const heroTl = gsap.timeline({ defaults: { ease: 'power2.out', force3D: true } });
+  const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
 
-    heroTl
-      .to(video, { scale: 1, opacity: 1, duration: 1.8 }, 0)
-      .to(frame, { opacity: 1, duration: 0.8 }, 0.5)
-      .to(nav, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, 0.6)
-      .to(bgText, { y: 0, opacity: 1, duration: 0.8 }, 1)
-      .to(title, { y: 0, opacity: 1, duration: 0.8 }, 1.2)
-      .to(overline, { y: 0, opacity: 1, duration: 0.6 }, 1.3)
-      .to(scrollIndicator, { y: 0, opacity: 1, duration: 0.6 }, 1.5)
-      .to(subtitle, { y: 0, opacity: 1, duration: 0.7 }, 1.5)
-      .to(bottomRail, { y: 0, opacity: 1, duration: 0.6 }, 1.7);
+  tl
+    .to(video, { scale: 1, opacity: 1, duration: 2 }, 0)
+    .to(nav, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, 0.5)
+    .to(title, { y: 0, opacity: 1, duration: 0.9 }, 0.8)
+    .to(eyebrow, { y: 0, opacity: 1, duration: 0.6 }, 1)
+    .to(subtitle, { y: 0, opacity: 1, duration: 0.7 }, 1.1)
+    .to(scroll, { y: 0, opacity: 1, duration: 0.6 }, 1.3)
+    .to(pills, { y: 0, opacity: 1, duration: 0.6 }, 1.4);
 
-    gsap.to(video, {
-      scale: 0.95,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: hero,
-        start: 'top top',
-        end: '+=800',
-        scrub: 1,
-      },
-    });
+  gsap.to(video, {
+    scale: 0.95,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: hero,
+      start: 'top top',
+      end: '+=600',
+      scrub: true,
+    },
+  });
 
-    gsap.to(details, {
-      y: -60,
-      opacity: 0,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: hero,
-        start: '10% top',
-        end: 'bottom top',
-        scrub: 1,
-      },
-    });
+  gsap.to([title, subtitle, eyebrow].filter(Boolean), {
+    y: -80,
+    opacity: 0,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: hero,
+      start: '10% top',
+      end: 'bottom top',
+      scrub: true,
+    },
+  });
 
-    if (bgText) {
-      gsap.to(bgText, {
-        y: -50,
-        opacity: 0,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: hero,
-          start: '15% top',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
-    }
+  gsap.to(scroll, {
+    opacity: 0,
+    y: -20,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: hero,
+      start: '5% top',
+      end: '15% top',
+      scrub: true,
+    },
+  });
 
-    if (bottomRail) {
-      gsap.to(bottomRail, {
-        y: -20,
-        opacity: 0,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: hero,
-          start: '5% top',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
-    }
-
-    gsap.to(frame, {
-      opacity: 0.3,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: hero,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 1,
-      },
-    });
-  } catch (error) {
-    console.warn('Hero animation error:', error.message);
-  }
+  gsap.to(pills, {
+    y: -30,
+    opacity: 0,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: hero,
+      start: '5% top',
+      end: 'bottom top',
+      scrub: true,
+    },
+  });
 };
 
-const initProductRevealAnimations = () => {
-  const section = document.querySelector('.product-reveal');
-  const watch = document.querySelector('.product-reveal-watch');
-  const title = document.querySelector('.product-reveal-title');
-  const subtitle = document.querySelector('.product-reveal-subtitle');
-  const cta = document.querySelector('.product-reveal-cta-group');
-  const details = document.querySelector('.product-reveal-details');
-  const bgText = document.querySelector('.product-reveal-text-bg');
+/* ===== Product ===== */
+const initProduct = () => {
+  const section = document.querySelector('.product');
+  const image = document.querySelector('.product-image img');
+  const info = document.querySelector('.product-info');
 
-  if (!section || !watch || !title || !subtitle || !cta || !details || !bgText) {
-    console.warn('Product reveal elements missing, skipping animations');
-    return;
-  }
+  if (!section || !image || !info) return;
 
-  try {
-    gsap.set(watch, { opacity: 0, y: 40, rotation: -3, force3D: true });
-    gsap.set([title, subtitle, cta], { opacity: 0, y: 30, force3D: true });
+  gsap.set(image, { opacity: 0, y: 50, scale: 0.95 });
+  gsap.set(info, { opacity: 0, y: 40 });
 
-    const revealTimeline = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 60%',
-        toggleActions: 'play none none reverse',
-      },
-    });
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: section,
+      start: 'top 60%',
+      toggleActions: 'play none none reverse',
+    },
+  });
 
-    revealTimeline
-      .to(watch, { opacity: 1, y: 0, rotation: 0, duration: 1, ease: 'power3.out' })
-      .to(title, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.6')
-      .to(subtitle, { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out' }, '-=0.4')
-      .to(cta, { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out' }, '-=0.4');
+  tl
+    .to(image, { opacity: 1, y: 0, scale: 1, duration: 1, ease: 'power3.out' })
+    .to(info, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, '-=0.5');
 
-    gsap.to(watch, {
-      rotation: 15,
-      scale: 1.2,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: section,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 1.5,
-      },
-    });
-
-    gsap.to(details, {
-      y: -100,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: section,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 1,
-      },
-    });
-
-    gsap.to(bgText, {
-      y: -180,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: section,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 1,
-      },
-    });
-  } catch (error) {
-    console.warn('Product reveal animation error:', error.message);
-  }
+  gsap.to(image, {
+    rotation: 12,
+    scale: 1.15,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: section,
+      start: 'top top',
+      end: 'bottom top',
+      scrub: 1.5,
+    },
+  });
 };
 
-const initEthosAnimations = () => {
-  const section = document.querySelector('.ethos');
-  const panels = Array.from(document.querySelectorAll('.ethos-main'));
-  const bgImages = Array.from(document.querySelectorAll('.ethos-bg-img'));
-  const triggers = Array.from(document.querySelectorAll('.ethos-next-btn'));
+/* ===== Variants ===== */
+const initVariants = () => {
+  const section = document.querySelector('.variants');
+  const variants = document.querySelectorAll('.variant');
+  const bgImages = document.querySelectorAll('.variants-bg-img');
+  const buttons = document.querySelectorAll('.btn-next');
 
-  if (!section || !panels.length || !bgImages.length || !triggers.length) {
-    console.warn('Ethos elements missing, skipping animations');
-    return;
-  }
+  if (!section || !variants.length || !bgImages.length) return;
 
-  try {
-    bgImages.forEach((image) => {
-      gsap.to(image, {
-        scale: 1.08,
-        yPercent: 8,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: section,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
+  bgImages.forEach((img) => {
+    gsap.to(img, {
+      scale: 1.08,
+      yPercent: 8,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true,
+      },
     });
+  });
 
-    const animatePanelIn = (panel) => {
-      const textChildren = panel.querySelectorAll('.ethos-text-side > *');
-      const watch = panel.querySelector('.ethos-watch-img');
+  let isAnimating = false;
 
-      gsap.set(textChildren, { x: 60, opacity: 0, force3D: true });
-      gsap.set(watch, { x: 100, opacity: 0, rotation: 3, force3D: true });
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      if (isAnimating) return;
+
+      const current = document.querySelector('.variant.active');
+      const targetKey = btn.dataset.target;
+      const next = document.querySelector(`.variant[data-variant="${targetKey}"]`);
+      const currentBg = document.querySelector('.variants-bg-img.active');
+      const nextBg = document.querySelector(`.variants-bg-${targetKey}`);
+
+      if (!current || !next || current === next) return;
+
+      isAnimating = true;
+
+      const currentEls = current.querySelectorAll('.variant-text > *');
+      const currentImg = current.querySelector('.variant-image img');
+      const nextEls = next.querySelectorAll('.variant-text > *');
+      const nextImg = next.querySelector('.variant-image img');
+
+      gsap.set(nextEls, { x: 60, opacity: 0 });
+      gsap.set(nextImg, { x: 80, opacity: 0, rotation: 3 });
 
       gsap
-        .timeline()
-        .to(textChildren, {
+        .timeline({
+          onComplete: () => {
+            isAnimating = false;
+          },
+        })
+        .to(currentEls, {
+          x: -60,
+          opacity: 0,
+          duration: 0.35,
+          stagger: 0.03,
+          ease: 'power2.inOut',
+        })
+        .to(currentImg, { x: -80, opacity: 0, duration: 0.4, ease: 'power2.inOut' }, '<')
+        .add(() => {
+          current.classList.remove('active');
+          next.classList.add('active');
+          if (currentBg) currentBg.classList.remove('active');
+          if (nextBg) nextBg.classList.add('active');
+        })
+        .to(nextEls, {
           x: 0,
           opacity: 1,
-          duration: 0.6,
-          stagger: 0.06,
+          duration: 0.55,
+          stagger: 0.05,
           ease: 'power2.out',
         })
-        .to(watch, { x: 0, opacity: 1, rotation: 0, duration: 0.8, ease: 'power3.out' }, '-=0.4');
-    };
-
-    const activePanel = document.querySelector('.ethos-main.active');
-    if (activePanel) {
-      animatePanelIn(activePanel);
-    }
-
-    let isAnimating = false;
-
-    triggers.forEach((trigger) => {
-      trigger.addEventListener('click', () => {
-        if (isAnimating) return;
-
-        const currentPanel = document.querySelector('.ethos-main.active');
-        const targetKey = trigger.dataset.target;
-        const nextPanel = document.querySelector(`.ethos-main.variant-${targetKey}`);
-        const currentBg = document.querySelector('.ethos-bg-img.active');
-        const nextBg = document.querySelector(`.ethos-bg-${targetKey}`);
-
-        if (!currentPanel || !nextPanel || currentPanel === nextPanel || !currentBg || !nextBg) {
-          return;
-        }
-
-        isAnimating = true;
-
-        const currentTextChildren = currentPanel.querySelectorAll('.ethos-text-side > *');
-        const currentWatch = currentPanel.querySelector('.ethos-watch-img');
-        const nextTextChildren = nextPanel.querySelectorAll('.ethos-text-side > *');
-        const nextWatch = nextPanel.querySelector('.ethos-watch-img');
-
-        gsap.set(nextTextChildren, { x: 80, opacity: 0, force3D: true });
-        gsap.set(nextWatch, { x: 100, opacity: 0, rotation: 3, force3D: true });
-
-        gsap
-          .timeline({
-            onComplete: () => {
-              isAnimating = false;
-            },
-          })
-          .to(currentTextChildren, {
-            x: -80,
-            opacity: 0,
-            duration: 0.35,
-            stagger: 0.03,
-            ease: 'power2.inOut',
-          })
-          .to(currentWatch, { x: -100, opacity: 0, duration: 0.4, ease: 'power2.inOut' }, '<')
-          .add(() => {
-            currentPanel.classList.remove('active');
-            nextPanel.classList.add('active');
-            currentBg.classList.remove('active');
-            nextBg.classList.add('active');
-          })
-          .to(nextTextChildren, {
-            x: 0,
-            opacity: 1,
-            duration: 0.55,
-            stagger: 0.05,
-            ease: 'power2.out',
-          })
-          .to(nextWatch, { x: 0, opacity: 1, rotation: 0, duration: 0.7, ease: 'power3.out' }, '-=0.4');
-      });
+        .to(nextImg, { x: 0, opacity: 1, rotation: 0, duration: 0.7, ease: 'power3.out' }, '-=0.4');
     });
-  } catch (error) {
-    console.warn('Ethos animation error:', error.message);
-  }
+  });
 };
 
-const initDismantleAnimations = () => {
-  const section = document.querySelector('.dismantle');
-  const header = document.querySelector('.dismantle-header');
-  const canvas = document.getElementById('dismantle-canvas');
+/* ===== Craft ===== */
+const initCraft = () => {
+  const section = document.querySelector('.craft');
+  const header = document.querySelector('.craft-header');
+  const canvas = document.getElementById('craft-canvas');
 
-  if (!section || !header || !canvas) {
-    console.warn('Dismantle elements missing, skipping animations');
-    return;
-  }
+  if (!section || !canvas) return;
 
-  const context = canvas.getContext('2d');
-  if (!context) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
 
   const totalFrames = 40;
   const images = [];
   const sequence = { frame: 0 };
-  let loadedCount = 0;
+  let loaded = 0;
   let allLoaded = false;
 
-  const clearCanvas = () => {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-  };
-
   const drawFallback = () => {
-    clearCanvas();
-    const gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
     gradient.addColorStop(0, '#0a0a0a');
     gradient.addColorStop(0.5, '#121018');
     gradient.addColorStop(1, '#050505');
-    context.fillStyle = gradient;
-    context.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    context.strokeStyle = 'rgba(201, 169, 124, 0.25)';
-    context.lineWidth = 1.5;
-    context.strokeRect(canvas.width * 0.15, canvas.height * 0.2, canvas.width * 0.7, canvas.height * 0.6);
+    ctx.strokeStyle = 'rgba(201, 169, 124, 0.25)';
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(canvas.width * 0.15, canvas.height * 0.2, canvas.width * 0.7, canvas.height * 0.6);
 
-    context.fillStyle = 'rgba(255, 255, 255, 0.8)';
-    context.font = '500 36px Outfit, sans-serif';
-    context.textAlign = 'center';
-    context.textBaseline = 'middle';
-    context.fillText('CRAFTSMANSHIP', canvas.width / 2, canvas.height / 2 - 15);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    ctx.font = '500 36px Outfit, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('CRAFTSMANSHIP', canvas.width / 2, canvas.height / 2 - 15);
 
-    context.fillStyle = 'rgba(255, 255, 255, 0.4)';
-    context.font = '300 16px Inter, sans-serif';
-    context.fillText('Mechanical precision through every component', canvas.width / 2, canvas.height / 2 + 25);
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    ctx.font = '300 16px Inter, sans-serif';
+    ctx.fillText('Mechanical precision through every component', canvas.width / 2, canvas.height / 2 + 25);
   };
 
-  const drawImageContain = (image) => {
-    if (!image || !image.complete || !image.naturalWidth || !image.naturalHeight) {
+  const drawImage = (img) => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if (!img || !img.complete || !img.naturalWidth) {
       drawFallback();
       return;
     }
-    clearCanvas();
-    const ratio = Math.min(canvas.width / image.naturalWidth, canvas.height / image.naturalHeight);
-    const width = image.naturalWidth * ratio;
-    const height = image.naturalHeight * ratio;
-    const x = (canvas.width - width) / 2;
-    const y = (canvas.height - height) / 2;
-    context.drawImage(image, x, y, width, height);
+    const ratio = Math.min(canvas.width / img.naturalWidth, canvas.height / img.naturalHeight);
+    const w = img.naturalWidth * ratio;
+    const h = img.naturalHeight * ratio;
+    ctx.drawImage(img, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
   };
 
   const render = () => {
-    if (allLoaded && images[sequence.frame]) {
-      drawImageContain(images[sequence.frame]);
+    if (allLoaded && images[Math.round(sequence.frame)]) {
+      drawImage(images[Math.round(sequence.frame)]);
     } else {
       drawFallback();
     }
   };
 
   for (let i = 0; i < totalFrames; i++) {
-    const image = new Image();
-    image.src = `/images/sequence/ezgif-frame-${String(i + 1).padStart(3, '0')}.jpg`;
-    image.onload = () => {
-      loadedCount++;
-      if (loadedCount === totalFrames) {
+    const img = new Image();
+    img.src = `/images/sequence/ezgif-frame-${String(i + 1).padStart(3, '0')}.jpg`;
+    img.onload = () => {
+      loaded++;
+      if (loaded === totalFrames) {
         allLoaded = true;
         ScrollTrigger.refresh();
       }
-      if (sequence.frame === i) render();
+      if (Math.round(sequence.frame) === i) render();
     };
-    image.onerror = () => {
-      loadedCount++;
-      if (loadedCount === totalFrames) {
+    img.onerror = () => {
+      loaded++;
+      if (loaded === totalFrames) {
         allLoaded = true;
         ScrollTrigger.refresh();
       }
     };
-    images.push(image);
+    images.push(img);
   }
 
   drawFallback();
 
-  try {
-    gsap.to(sequence, {
-      frame: totalFrames - 1,
-      snap: { frame: 1 },
-      ease: 'none',
-      onUpdate: render,
-      scrollTrigger: {
-        trigger: section,
-        start: 'top 40%',
-        end: 'bottom bottom',
-        scrub: 0.5,
-      },
-    });
+  gsap.to(sequence, {
+    frame: totalFrames - 1,
+    snap: { frame: 1 },
+    ease: 'none',
+    onUpdate: render,
+    scrollTrigger: {
+      trigger: section,
+      start: 'top 40%',
+      end: 'bottom bottom',
+      scrub: 0.5,
+    },
+  });
 
+  if (header) {
     gsap.to(header, {
       x: -120,
       opacity: 0,
@@ -454,149 +385,112 @@ const initDismantleAnimations = () => {
         trigger: section,
         start: 'top 45%',
         end: 'top 10%',
-        scrub: 1,
+        scrub: true,
       },
     });
-  } catch (error) {
-    console.warn('Dismantle animation error:', error.message);
   }
 };
 
-const initNavScroll = () => {
-  const nav = document.querySelector('.nav');
-  const navMenu = document.querySelector('.nav-menu');
-
-  if (!nav) return;
-
-  const closeNavMenu = () => {
-    if (!navMenu) return;
-    nav.classList.remove('is-open');
-    navMenu.setAttribute('aria-expanded', 'false');
-  };
-
-  if (navMenu) {
-    navMenu.addEventListener('click', () => {
-      const isOpen = nav.classList.toggle('is-open');
-      navMenu.setAttribute('aria-expanded', String(isOpen));
-    });
-
-    document.addEventListener('click', (event) => {
-      if (!nav.contains(event.target)) closeNavMenu();
-    });
-
-    window.addEventListener('resize', () => {
-      if (window.innerWidth > 768) closeNavMenu();
-    });
-  }
-
-  let lastScroll = 0;
-  let navTween = null;
-
-  lenis.on('scroll', ({ scroll }) => {
-    if (nav.classList.contains('is-open')) {
-      lastScroll = scroll;
-      return;
-    }
-
-    if (scroll <= 10) {
-      gsap.to(nav, { yPercent: 0, duration: 0.3, ease: 'power2.out', overwrite: true });
-      lastScroll = scroll;
-      return;
-    }
-
-    if (scroll > lastScroll + 5) {
-      gsap.to(nav, { yPercent: -100, duration: 0.25, ease: 'power2.out', overwrite: true });
-    } else if (scroll < lastScroll - 5) {
-      gsap.to(nav, { yPercent: 0, duration: 0.25, ease: 'power2.out', overwrite: true });
-    }
-
-    lastScroll = scroll;
-  });
-};
-
+/* ===== Modal ===== */
 const initModal = () => {
-  const modal = document.getElementById('reserve-modal');
-  const closeButton = document.getElementById('modal-close');
-  const openButtons = document.querySelectorAll('.open-reserve-modal');
-  const anchorLinks = document.querySelectorAll('a[href^="#"]');
-  const nav = document.querySelector('.nav');
-  const navMenu = document.querySelector('.nav-menu');
-  const form = document.getElementById('reserve-form');
+  const modal = document.getElementById('modal');
+  const backdrop = document.getElementById('modal-backdrop');
+  const closeBtn = document.getElementById('modal-close');
+  const openBtns = [document.getElementById('nav-reserve-btn'), document.getElementById('footer-reserve-btn')];
+  const form = document.getElementById('modal-form');
+  const navLinks = document.querySelectorAll('.nav-links a');
 
-  if (!modal || !closeButton) return;
+  if (!modal || !backdrop) return;
 
-  const closeNavMenu = () => {
-    if (!nav || !navMenu) return;
-    nav.classList.remove('is-open');
-    navMenu.setAttribute('aria-expanded', 'false');
-  };
-
-  const openModal = () => {
-    modal.classList.add('active');
+  const open = () => {
     modal.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
     lenis.stop();
   };
 
-  const closeModal = () => {
-    modal.classList.remove('active');
+  const close = () => {
     modal.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     lenis.start();
   };
 
-  openButtons.forEach((button) => button.addEventListener('click', openModal));
-  closeButton.addEventListener('click', closeModal);
-
-  modal.addEventListener('click', (event) => {
-    if (event.target === modal) closeModal();
+  openBtns.forEach((btn) => {
+    if (btn) btn.addEventListener('click', open);
   });
 
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && modal.classList.contains('active')) closeModal();
+  if (closeBtn) closeBtn.addEventListener('click', close);
+  backdrop.addEventListener('click', close);
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') {
+      close();
+    }
   });
 
-  anchorLinks.forEach((link) => {
-    link.addEventListener('click', (event) => {
-      const targetId = link.getAttribute('href');
-      if (!targetId || targetId === '#') return;
+  navLinks.forEach((link) => {
+    link.addEventListener('click', (e) => {
+      const href = link.getAttribute('href');
+      if (!href || href === '#') return;
 
-      const target = document.querySelector(targetId);
+      const target = document.querySelector(href);
       if (!target) return;
 
-      event.preventDefault();
-      closeNavMenu();
-      lenis.scrollTo(target, { offset: -80, duration: 1 });
-      if (modal.classList.contains('active')) closeModal();
+      e.preventDefault();
+
+      const links = document.querySelector('.nav-links');
+      const toggle = document.getElementById('nav-toggle');
+      if (links) links.classList.remove('open');
+      if (toggle) toggle.classList.remove('active');
+
+      lenis.scrollTo(target, { offset: -80 });
+      close();
     });
   });
 
   if (form) {
-    form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-      console.log('Reservation form submitted:', data);
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
 
-      const submitBtn = form.querySelector('.form-submit-btn');
-      const originalText = submitBtn.textContent;
-      submitBtn.textContent = 'Thank You!';
-      submitBtn.disabled = true;
-      submitBtn.style.background = 'linear-gradient(180deg, #c9a97c 0%, #b8945e 100%)';
+      const btn = form.querySelector('.btn-submit');
+      const original = btn.textContent;
+      btn.textContent = 'Thank You!';
+      btn.disabled = true;
+      btn.style.background = 'linear-gradient(180deg, #c9a97c 0%, #b8945e 100%)';
 
       setTimeout(() => {
         form.reset();
-        submitBtn.textContent = originalText;
-        submitBtn.disabled = false;
-        submitBtn.style.background = '';
-        closeModal();
+        btn.textContent = original;
+        btn.disabled = false;
+        btn.style.background = '';
+        close();
       }, 2000);
     });
   }
 };
 
+/* ===== Smooth scroll for anchor links ===== */
+document.querySelectorAll('a[href^="#"]').forEach((link) => {
+  if (link.closest('.nav-links')) return;
+
+  link.addEventListener('click', (e) => {
+    const href = link.getAttribute('href');
+    if (!href || href === '#') return;
+
+    const target = document.querySelector(href);
+    if (!target) return;
+
+    e.preventDefault();
+    lenis.scrollTo(target, { offset: -80 });
+  });
+});
+
+/* ===== Start ===== */
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initApp);
+  document.addEventListener('DOMContentLoaded', init);
 } else {
-  initApp();
+  init();
 }
+
+window.addEventListener('resize', () => {
+  ScrollTrigger.refresh();
+});

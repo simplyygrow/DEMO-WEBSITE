@@ -3,419 +3,273 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Franck Muller Vanguard Smurfette. A cinematic single-page experience celebrating playful heritage and high-complication horology."
-    />
+    <meta name="description" content="Franck Muller Vanguard Smurfette. A cinematic single-page experience celebrating playful heritage and high-complication horology." />
     <title>Franck Muller | Vanguard Smurfette</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
     <script type="module" src="/src/main.js"></script>
   </head>
   <body>
     <nav class="nav">
       <div class="nav-brand">
-        <div class="nav-logo-container">
-          <img
-            class="nav-logo-img"
-            src="/assets/photo/logo.png"
-            alt="Brand logo"
-          />
-        </div>
+        <img class="nav-logo" src="/assets/photo/logo.png" alt="Brand logo" />
       </div>
-      <div class="nav-panel" id="nav-panel">
-        <div class="nav-model">Ref. V 32</div>
-        <div class="nav-links">
-          <a href="#collection">Collection</a>
-          <a href="#heritage">Maison</a>
-          <a href="#craftsmanship">Craftsmanship</a>
-          <a href="#showcase">Showcase</a>
-        </div>
-        <button class="nav-cta open-reserve-modal" type="button">Private Inquiry</button>
+      <div class="nav-links">
+        <a href="#collection">Collection</a>
+        <a href="#heritage">Maison</a>
+        <a href="#craftsmanship">Craftsmanship</a>
+        <a href="#showcase">Showcase</a>
       </div>
-      <button class="nav-menu" type="button" aria-label="Open navigation menu" aria-controls="nav-panel" aria-expanded="false">
+      <button class="nav-cta" id="nav-reserve-btn" type="button">Private Inquiry</button>
+      <button class="nav-toggle" id="nav-toggle" type="button" aria-label="Toggle menu">
         <span></span>
         <span></span>
       </button>
     </nav>
 
     <main>
-      <section class="hero">
-        <div class="hero-bg">
-          <video class="bg-video" autoplay loop muted playsinline poster="/assets/photo/smurfette-dial.jpg">
+      <section class="hero" id="hero">
+        <div class="hero-video-wrapper">
+          <video class="hero-video" autoplay muted loop playsinline poster="/assets/photo/smurfette-dial.jpg">
             <source src="/hero-video.mp4" type="video/mp4" />
           </video>
-          <div class="hero-overlay"></div>
         </div>
+        <div class="hero-overlay"></div>
         <div class="hero-content">
-          <div class="hero-frame"></div>
-          <div class="hero-text-bg">VANGUARD</div>
-          <div class="hero-details">
-            <p class="hero-overline">Franck Muller / Vanguard Smurfette / Numbered Edition</p>
-            <h1 class="hero-title">Smurfette</h1>
-            <a class="hero-scroll-indicator" href="#collection" aria-label="Scroll to collection">↓</a>
-            <p class="hero-subtitle">
-              A rare Vanguard expression where playful heritage meets high-complication
-              horology, framed by diamond-set brilliance and sculpted for collectors with a
-              taste for the exceptional.
-            </p>
+          <p class="hero-eyebrow">Franck Muller / Vanguard Smurfette / Numbered Edition</p>
+          <h1 class="hero-title">Smurfette</h1>
+          <p class="hero-subtitle">
+            A rare Vanguard expression where playful heritage meets high-complication
+            horology, framed by diamond-set brilliance and sculpted for collectors with a
+            taste for the exceptional.
+          </p>
+          <div class="hero-scroll">
+            <span>Scroll</span>
+            <div class="hero-scroll-line"></div>
           </div>
-          <div class="hero-bottom-rail">
-            <span class="hero-pill">Diamond Set</span>
-            <span class="hero-pill hero-pill-center">Swiss Automatic</span>
-            <span class="hero-pill">Limited 88</span>
-          </div>
+        </div>
+        <div class="hero-pills">
+          <span class="pill">Diamond Set</span>
+          <span class="pill">Swiss Automatic</span>
+          <span class="pill">Limited 88</span>
         </div>
       </section>
 
-      <section class="product-reveal">
-        <div class="product-reveal-bg">
-            <img
-              class="product-reveal-bg-img"
-              src="/assets/photo/smurfette-dial.jpg"
-              alt="Franck Muller Vanguard macro background"
-            />
-          <div class="product-reveal-overlay"></div>
+      <section class="product" id="collection">
+        <div class="product-bg">
+          <img src="/assets/photo/smurfette-dial.jpg" alt="" loading="lazy" />
         </div>
-        <div class="product-reveal-content">
-          <div class="product-reveal-text-bg">PRECISION</div>
-          <div class="product-reveal-watch-container">
-            <img
-              class="product-reveal-watch"
-              src="/assets/photo/unnamed (4).jpg"
-              alt="Franck Muller Vanguard Smurfette watch"
-            />
+        <div class="product-inner">
+          <div class="product-image">
+            <img src="/assets/photo/unnamed (4).jpg" alt="Franck Muller Vanguard Smurfette" />
           </div>
-          <div class="product-reveal-details">
-            <h2 class="product-reveal-title">
-              Crafted For<br />
-              <span class="accent-gold">The Timeless</span>
-            </h2>
-            <p class="product-reveal-subtitle">
+          <div class="product-info">
+            <span class="product-tag">V 32 SC AT FO</span>
+            <h2>Crafted For<br /><em>The Timeless</em></h2>
+            <p>
               32mm stainless steel, a self-winding Swiss movement, and 75 meticulously
               assembled components. Every detail is composed with the precision and theatrical
               elegance that define Franck Muller.
             </p>
-            <div class="product-reveal-cta-group">
-              <span class="edition-tag">V 32 SC AT FO</span>
-              <a
-                class="secondary-btn"
-                href="https://www.franckmuller.com"
-                target="_blank"
-                rel="noreferrer"
-              >
-                View Specifications
-              </a>
-            </div>
+            <a class="btn-outline" href="https://www.franckmuller.com" target="_blank" rel="noreferrer">
+              View Specifications
+            </a>
           </div>
         </div>
       </section>
 
       <section class="heritage" id="heritage">
         <div class="heritage-bg">
-          <img
-            class="heritage-bg-img"
-            src="/assets/photo/genrate_side_angle_of_this_202605010015.jpeg"
-            alt="Franck Muller heritage background"
-          />
-          <div class="heritage-overlay"></div>
+          <img src="/assets/photo/genrate_side_angle_of_this_202605010015.jpeg" alt="" loading="lazy" />
         </div>
-        <div class="heritage-content">
+        <div class="heritage-inner">
           <div class="heritage-text">
-            <p class="heritage-eyebrow">Est. 1991 · Geneva, Switzerland</p>
-            <h2 class="heritage-title">
-              Three Decades<br />
-              of <em>Mastery</em>
-            </h2>
-            <div class="heritage-divider"></div>
-            <p class="heritage-body">
+            <p class="heritage-eyebrow">Est. 1991 &middot; Geneva, Switzerland</p>
+            <h2>Three Decades<br />of <em>Mastery</em></h2>
+            <div class="divider"></div>
+            <p>
               Founded in Geneva's watchmaking heartland, Franck Muller has spent decades
               shaping a singular language of mechanical boldness. Every timepiece is both an
               instrument and a statement of intent.
             </p>
-            <p class="heritage-body">
+            <p>
               The Vanguard Smurfette carries that legacy forward with surprising grace,
               balancing whimsical artistry, gem-set opulence, and unmistakable Swiss rigor.
             </p>
-            <a
-              class="heritage-link"
-              href="https://www.franckmuller.com"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Discover Our Maison →
+            <a class="link-arrow" href="https://www.franckmuller.com" target="_blank" rel="noreferrer">
+              Discover Our Maison
             </a>
           </div>
           <div class="heritage-stats">
-            <div class="heritage-stat">
-              <span class="heritage-stat-value">35+</span>
-              <span class="heritage-stat-label">Years of Innovation</span>
+            <div class="stat">
+              <span class="stat-number">35+</span>
+              <span class="stat-label">Years of Innovation</span>
             </div>
-            <div class="heritage-stat">
-              <span class="heritage-stat-value">1,200+</span>
-              <span class="heritage-stat-label">Calibres Created</span>
+            <div class="stat">
+              <span class="stat-number">1,200+</span>
+              <span class="stat-label">Calibres Created</span>
             </div>
-            <div class="heritage-stat">
-              <span class="heritage-stat-value">40+</span>
-              <span class="heritage-stat-label">Global Boutiques</span>
+            <div class="stat">
+              <span class="stat-number">40+</span>
+              <span class="stat-label">Global Boutiques</span>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="ethos" id="collection">
-        <div class="ethos-header">
-          <h2 class="ethos-section-title">The Collection</h2>
+      <section class="variants" id="variants">
+        <div class="variants-bg">
+          <img class="variants-bg-img variants-bg-bl active" src="/assets/photo/unnamed (4).jpg" alt="" />
+          <img class="variants-bg-img variants-bg-rs" src="/assets/photo/unnamed (3).jpg" alt="" />
         </div>
-        <div class="ethos-dynamic-bg">
-          <img
-            class="ethos-bg-img ethos-bg-bl active"
-            src="/assets/photo/unnamed (4).jpg"
-            alt="Blue guilloche dial background"
-          />
-          <img
-            class="ethos-bg-img ethos-bg-rs"
-            src="/assets/photo/unnamed (3).jpg"
-            alt="Rose pink dial background"
-          />
-        </div>
-        <div class="ethos-slider-container">
-          <div class="ethos-main variant-bl active" data-variant="bl">
-            <div class="ethos-text-side">
-              <span class="ethos-variant-chip">BL · Blue Guilloché Dial</span>
-              <h2 class="ethos-alt-title">Franck Muller <br /> Vanguard</h2>
-              <p class="ethos-alt-subtitle">A New Era Of Horology</p>
-              <p class="ethos-reference">V 32 SC AT FO SMURFETTE (BL)</p>
-              <div class="ethos-description">
-                A striking 32mm stainless steel composition with a stamped guilloché dial in a
+        <div class="variants-inner">
+          <div class="variant variant-bl active" data-variant="bl">
+            <div class="variant-text">
+              <span class="variant-chip">BL &middot; Blue Guilloch&eacute; Dial</span>
+              <h2>Franck Muller<br />Vanguard</h2>
+              <p class="variant-sub">A New Era Of Horology</p>
+              <p class="variant-ref">V 32 SC AT FO SMURFETTE (BL)</p>
+              <p>
+                A striking 32mm stainless steel composition with a stamped guilloch&eacute; dial in a
                 vivid sun-pattern blue, paired with a self-winding movement and a 38-hour
                 power reserve.
-              </div>
-              <button class="ethos-next-btn" data-target="rs" type="button" aria-label="View rose pink dial variant">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M6 12h12" />
-                  <path d="m13 5 7 7-7 7" />
-                </svg>
+              </p>
+              <button class="btn-next" data-target="rs" type="button">
+                <svg viewBox="0 0 24 24"><path d="M6 12h12m0 0l-5-5m5 5l-5 5" /></svg>
               </button>
             </div>
-            <div class="ethos-product-center">
-              <img
-                class="ethos-watch-img"
-                src="/assets/photo/unnamed (4).jpg"
-                alt="Blue guilloche Franck Muller Vanguard watch"
-              />
+            <div class="variant-image">
+              <img src="/assets/photo/unnamed (4).jpg" alt="Blue guilloche dial" />
             </div>
           </div>
 
-          <div class="ethos-main variant-rs" data-variant="rs">
-            <div class="ethos-text-side">
-              <span class="ethos-variant-chip">RS · Rose Pink Dial</span>
-              <h2 class="ethos-alt-title">Franck Muller <br /> Vanguard</h2>
-              <p class="ethos-alt-subtitle">A New Era Of Horology</p>
-              <p class="ethos-reference">V 32 SC AT FO SMURFETTE (RS)</p>
-              <div class="ethos-description">
+          <div class="variant variant-rs" data-variant="rs">
+            <div class="variant-text">
+              <span class="variant-chip">RS &middot; Rose Pink Dial</span>
+              <h2>Franck Muller<br />Vanguard</h2>
+              <p class="variant-sub">A New Era Of Horology</p>
+              <p class="variant-ref">V 32 SC AT FO SMURFETTE (RS)</p>
+              <p>
                 A radiant rose-pink interpretation distinguished by its 75-component movement,
-                refined Côtes de Genève decoration, and the whimsical charm of Smurfette
+                refined C&ocirc;tes de Gen&egrave;ve decoration, and the whimsical charm of Smurfette
                 rendered through haute horlogerie craftsmanship.
-              </div>
-              <button class="ethos-next-btn" data-target="bl" type="button" aria-label="View blue guilloche dial variant">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M6 12h12" />
-                  <path d="m13 5 7 7-7 7" />
-                </svg>
+              </p>
+              <button class="btn-next" data-target="bl" type="button">
+                <svg viewBox="0 0 24 24"><path d="M6 12h12m0 0l-5-5m5 5l-5 5" /></svg>
               </button>
             </div>
-            <div class="ethos-product-center">
-              <img
-                class="ethos-watch-img"
-                src="/assets/photo/unnamed (3).jpg"
-                alt="Rose pink Franck Muller Vanguard watch"
-              />
+            <div class="variant-image">
+              <img src="/assets/photo/unnamed (3).jpg" alt="Rose pink dial" />
             </div>
           </div>
         </div>
       </section>
 
-      <section class="dismantle" id="craftsmanship">
-        <div class="dismantle-container">
-          <div class="dismantle-header">
-            <h2 class="section-title">
-              The Architecture Of <span class="accent">Precision</span>
-            </h2>
-            <p class="section-subtitle">
+      <section class="craft" id="craftsmanship">
+        <div class="craft-inner">
+          <div class="craft-header">
+            <h2>The Architecture Of <span>Precision</span></h2>
+            <p>
               152 hand-assembled components. Every gear, spring, and jewel is placed with
               absolute intent, revealing the mechanical soul that powers the Vanguard.
             </p>
           </div>
-          <canvas id="dismantle-canvas" width="1920" height="1080"></canvas>
+          <div class="craft-canvas-wrapper">
+            <canvas id="craft-canvas"></canvas>
+          </div>
         </div>
       </section>
 
       <section class="showcase" id="showcase">
-        <div class="showcase-visual">
-          <img
-            class="showcase-bg-img"
-            src="/assets/photo/unnamed (2).jpg"
-            alt="Franck Muller Vanguard showcase image"
-          />
-          <div class="showcase-gradient"></div>
+        <div class="showcase-bg">
+          <img src="/assets/photo/unnamed (2).jpg" alt="" loading="lazy" />
         </div>
-        <div class="showcase-text">
-          <p class="showcase-eyebrow">Limited to 88 Numbered Timepieces</p>
-          <h2 class="showcase-headline">
-            Beyond<br />
-            <em>Ordinary.</em>
-          </h2>
-          <p class="showcase-body">
-            When three rows of pavé diamonds frame an impossible dial, rarity becomes a visual
+        <div class="showcase-inner">
+          <p class="showcase-tag">Limited to 88 Numbered Timepieces</p>
+          <h2>Beyond<br /><em>Ordinary.</em></h2>
+          <p>
+            When three rows of pav&eacute; diamonds frame an impossible dial, rarity becomes a visual
             language. This is the world of Franck Muller at its most theatrical.
           </p>
-          <a
-            class="showcase-ig-link"
-            href="https://www.instagram.com/franckmuller/"
-            target="_blank"
-            rel="noreferrer"
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="3" y="3" width="18" height="18" rx="5" />
-              <circle cx="12" cy="12" r="4" />
-              <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-            </svg>
+          <a class="link-arrow" href="https://www.instagram.com/franckmuller/" target="_blank" rel="noreferrer">
             Follow @franckmuller
           </a>
         </div>
       </section>
+
+      <section class="gallery" id="gallery">
+        <div class="gallery-header">
+          <p class="gallery-eyebrow">Visual Archive</p>
+          <h2>Details In <em>Focus</em></h2>
+        </div>
+        <div class="gallery-grid">
+          <div class="gallery-item gallery-tall">
+            <img src="/assets/photo/unnamed (4).jpg" alt="Vanguard Smurfette front view" loading="lazy" />
+          </div>
+          <div class="gallery-item">
+            <img src="/assets/photo/unnamed (3).jpg" alt="Vanguard detail close-up" loading="lazy" />
+          </div>
+          <div class="gallery-item">
+            <img src="/assets/photo/unnamed (2).jpg" alt="Vanguard craftsmanship detail" loading="lazy" />
+          </div>
+          <div class="gallery-item gallery-wide">
+            <img src="/assets/photo/genrate_side_angle_of_this_202605010015.jpeg" alt="Vanguard side angle" loading="lazy" />
+          </div>
+        </div>
+      </section>
     </main>
 
-    <section class="gallery" id="gallery">
-      <div class="gallery-header">
-        <p class="gallery-eyebrow">Visual Archive</p>
-        <h2 class="gallery-title">Details In <em>Focus</em></h2>
-      </div>
-      <div class="gallery-grid">
-        <div class="gallery-item gallery-item-lg">
-          <img
-            src="/assets/photo/unnamed (4).jpg"
-            alt="Vanguard Smurfette front view"
-            loading="lazy"
-          />
-        </div>
-        <div class="gallery-item">
-          <img
-            src="/assets/photo/unnamed (3).jpg"
-            alt="Vanguard detail close-up"
-            loading="lazy"
-          />
-        </div>
-        <div class="gallery-item">
-          <img
-            src="/assets/photo/unnamed (2).jpg"
-            alt="Vanguard craftsmanship detail"
-            loading="lazy"
-          />
-        </div>
-        <div class="gallery-item gallery-item-wide">
-          <img
-            src="/assets/photo/genrate_side_angle_of_this_202605010015.jpeg"
-            alt="Vanguard side angle perspective"
-            loading="lazy"
-          />
-        </div>
-      </div>
-    </section>
-
     <footer class="footer">
-      <div class="footer-top-rule"></div>
+      <div class="footer-rule"></div>
       <div class="footer-inner">
         <div class="footer-grid">
-          <div class="footer-brand-col">
+          <div class="footer-brand">
             <img class="footer-logo" src="/assets/photo/logo.png" alt="Brand logo" />
-            <p class="footer-tagline">Geneva · Est. 1991</p>
-            <p class="footer-address">
-              Rue du Tourbillon 1, 1217 Meyrin, Geneva, Switzerland
-            </p>
+            <p class="footer-tag">Geneva &middot; Est. 1991</p>
+            <p class="footer-address">Rue du Tourbillon 1, 1217 Meyrin, Geneva, Switzerland</p>
             <div class="footer-socials">
-              <a
-                class="footer-social"
-                href="https://www.instagram.com/franckmuller/"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Instagram"
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <rect x="3" y="3" width="18" height="18" rx="5" />
-                  <circle cx="12" cy="12" r="4" />
-                  <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-                </svg>
+              <a href="https://www.instagram.com/franckmuller/" target="_blank" rel="noreferrer" aria-label="Instagram">
+                <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" /></svg>
               </a>
-              <a
-                class="footer-social"
-                href="https://www.facebook.com/FranckMullerWatchland"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="Facebook"
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M14 8h3V4h-3c-3.1 0-5 2.1-5 5.4V12H6v4h3v4h4v-4h3.1l.9-4H13V9.7c0-1.1.4-1.7 1-1.7Z" />
-                </svg>
+              <a href="https://www.facebook.com/FranckMullerWatchland" target="_blank" rel="noreferrer" aria-label="Facebook">
+                <svg viewBox="0 0 24 24"><path d="M14 8h3V4h-3c-3.1 0-5 2.1-5 5.4V12H6v4h3v4h4v-4h3.1l.9-4H13V9.7c0-1.1.4-1.7 1-1.7Z" /></svg>
               </a>
-              <a
-                class="footer-social"
-                href="https://www.youtube.com/@FranckMuller"
-                target="_blank"
-                rel="noreferrer"
-                aria-label="YouTube"
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M21.6 7.2a2.7 2.7 0 0 0-1.9-1.9C18 4.8 12 4.8 12 4.8s-6 0-7.7.5A2.7 2.7 0 0 0 2.4 7.2C2 8.9 2 12 2 12s0 3.1.4 4.8a2.7 2.7 0 0 0 1.9 1.9c1.7.5 7.7.5 7.7.5s6 0 7.7-.5a2.7 2.7 0 0 0 1.9-1.9c.4-1.7.4-4.8.4-4.8s0-3.1-.4-4.8ZM10 15.5v-7l6 3.5-6 3.5Z" />
-                </svg>
+              <a href="https://www.youtube.com/@FranckMuller" target="_blank" rel="noreferrer" aria-label="YouTube">
+                <svg viewBox="0 0 24 24"><path d="M21.6 7.2a2.7 2.7 0 0 0-1.9-1.9C18 4.8 12 4.8 12 4.8s-6 0-7.7.5A2.7 2.7 0 0 0 2.4 7.2C2 8.9 2 12 2 12s0 3.1.4 4.8a2.7 2.7 0 0 0 1.9 1.9c1.7.5 7.7.5 7.7.5s6 0 7.7-.5a2.7 2.7 0 0 0 1.9-1.9c.4-1.7.4-4.8.4-4.8s0-3.1-.4-4.8ZM10 15.5v-7l6 3.5-6 3.5Z" /></svg>
               </a>
             </div>
           </div>
-
           <div class="footer-col">
-            <h5 class="footer-col-title">Collections</h5>
+            <h5>Collections</h5>
             <a href="https://www.franckmuller.com" target="_blank" rel="noreferrer">Vanguard</a>
-            <a href="https://www.franckmuller.com" target="_blank" rel="noreferrer">Cintrée Curvex</a>
+            <a href="https://www.franckmuller.com" target="_blank" rel="noreferrer">Cintr&eacute;e Curvex</a>
             <a href="https://www.franckmuller.com" target="_blank" rel="noreferrer">Grand Complications</a>
             <a href="https://www.franckmuller.com" target="_blank" rel="noreferrer">New Models</a>
           </div>
-
           <div class="footer-col">
-            <h5 class="footer-col-title">Maison</h5>
+            <h5>Maison</h5>
             <a href="https://www.franckmuller.com" target="_blank" rel="noreferrer">Watchland</a>
             <a href="https://www.franckmuller.com" target="_blank" rel="noreferrer">Heritage</a>
             <a href="https://www.franckmuller.com" target="_blank" rel="noreferrer">Savoir-Faire</a>
             <a href="https://www.franckmuller.com" target="_blank" rel="noreferrer">News</a>
           </div>
-
           <div class="footer-col">
-            <h5 class="footer-col-title">Boutiques</h5>
+            <h5>Boutiques</h5>
             <a href="https://www.franckmuller.com" target="_blank" rel="noreferrer">Geneva</a>
             <a href="https://www.franckmuller.com" target="_blank" rel="noreferrer">Dubai</a>
             <a href="https://www.franckmuller.com" target="_blank" rel="noreferrer">Singapore</a>
             <a href="https://www.franckmuller.com" target="_blank" rel="noreferrer">New York</a>
           </div>
-
-          <div class="footer-col footer-col-reserve">
-            <h5 class="footer-col-title">Smurfette</h5>
-            <p class="footer-col-desc">
-              Begin a confidential reservation enquiry for one of 88 numbered Vanguard
-              Smurfette editions.
-            </p>
-            <button class="footer-reserve-btn open-reserve-modal" type="button">
-              Reserve Your Piece
-            </button>
+          <div class="footer-col footer-col-cta">
+            <h5>Smurfette</h5>
+            <p>Begin a confidential reservation enquiry for one of 88 numbered Vanguard Smurfette editions.</p>
+            <button class="btn-reserve" id="footer-reserve-btn" type="button">Reserve Your Piece</button>
           </div>
         </div>
-
         <div class="footer-bottom">
-          <p class="footer-legal">© 2026 Franck Muller. All rights reserved. Trademarks.</p>
+          <p>&copy; 2026 Franck Muller. All rights reserved.</p>
           <div class="footer-bottom-links">
             <a href="https://www.franckmuller.com" target="_blank" rel="noreferrer">Legal</a>
             <a href="https://www.franckmuller.com" target="_blank" rel="noreferrer">Privacy</a>
@@ -425,75 +279,57 @@
       </div>
     </footer>
 
-    <div class="modal-overlay" id="reserve-modal" aria-hidden="true">
-      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="reserve-modal-title">
-        <button class="modal-close" id="modal-close" type="button" aria-label="Close reservation form">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M6 6 18 18" />
-            <path d="M18 6 6 18" />
-          </svg>
+    <div class="modal" id="modal" aria-hidden="true">
+      <div class="modal-backdrop" id="modal-backdrop"></div>
+      <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <button class="modal-close" id="modal-close" type="button" aria-label="Close">
+          <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" /></svg>
         </button>
         <div class="modal-left">
-          <img
-            class="modal-watch-img"
-            src="/assets/photo/unnamed (5).jpg"
-            alt="Franck Muller Vanguard Smurfette showcase"
-          />
-          <div class="modal-left-overlay"></div>
+          <img src="/assets/photo/unnamed (5).jpg" alt="Vanguard Smurfette" />
           <div class="modal-left-text">
-            <p class="modal-left-tag">No. 01 / 88</p>
-            <h3 class="modal-left-title">Vanguard<br />Smurfette</h3>
+            <span>No. 01 / 88</span>
+            <h3>Vanguard<br />Smurfette</h3>
           </div>
         </div>
         <div class="modal-right">
           <p class="modal-eyebrow">Private Reservation</p>
-          <h2 class="modal-title" id="reserve-modal-title">Secure Your <em>Piece</em></h2>
-          <p class="modal-subtitle">
-            One of 88 numbered editions awaits. Share your details and a maison advisor will
-            contact you privately.
-          </p>
-          <form
-            class="modal-form"
-            id="reserve-form"
-            name="reservation"
-            method="POST"
-            data-netlify="true"
-          >
-            <input type="hidden" name="form-name" value="reservation" />
+          <h2 id="modal-title">Secure Your <em>Piece</em></h2>
+          <p>One of 88 numbered editions awaits. Share your details and a maison advisor will contact you privately.</p>
+          <form id="modal-form">
             <div class="form-row">
-              <div class="form-group">
-                <label for="first-name">First Name</label>
-                <input id="first-name" name="first-name" type="text" required />
+              <div class="form-field">
+                <label for="fname">First Name</label>
+                <input id="fname" name="first-name" type="text" required />
               </div>
-              <div class="form-group">
-                <label for="last-name">Last Name</label>
-                <input id="last-name" name="last-name" type="text" required />
+              <div class="form-field">
+                <label for="lname">Last Name</label>
+                <input id="lname" name="last-name" type="text" required />
               </div>
             </div>
-            <div class="form-group">
+            <div class="form-field">
               <label for="email">Email Address</label>
               <input id="email" name="email" type="email" required />
             </div>
-            <div class="form-group">
+            <div class="form-field">
               <label for="phone">Phone / WhatsApp</label>
               <input id="phone" name="phone" type="tel" />
             </div>
-            <div class="form-group">
+            <div class="form-field">
               <label for="variant">Preferred Variant</label>
               <select id="variant" name="variant">
-                <option value="Blue Guilloché Dial">BL · Blue Guilloché Dial</option>
-                <option value="Rose Pink Dial">RS · Rose Pink Dial</option>
+                <option value="Blue Guilloché Dial">BL &middot; Blue Guilloch&eacute; Dial</option>
+                <option value="Rose Pink Dial">RS &middot; Rose Pink Dial</option>
               </select>
             </div>
-            <div class="form-group">
+            <div class="form-field">
               <label for="message">Message</label>
               <textarea id="message" name="message" rows="3"></textarea>
             </div>
-            <button class="form-submit-btn" type="submit">Submit Reservation</button>
+            <button class="btn-submit" type="submit">Submit Reservation</button>
           </form>
         </div>
       </div>
     </div>
-
   </body>
 </html>
