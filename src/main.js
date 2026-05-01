@@ -21,7 +21,7 @@ const initApp = () => {
   gsap.registerPlugin(ScrollTrigger);
 
   lenis = new Lenis({
-    lerp: 0.1,
+    lerp: 0.08,
     wheelMultiplier: 1,
     infinite: false,
     gestureOrientation: 'vertical',
@@ -47,7 +47,11 @@ const initApp = () => {
 
   setTimeout(() => {
     ScrollTrigger.refresh();
-  }, 100);
+  }, 200);
+
+  window.addEventListener('resize', () => {
+    ScrollTrigger.refresh();
+  });
 };
 
 const initHeroAnimations = () => {
@@ -63,97 +67,91 @@ const initHeroAnimations = () => {
   const bottomRail = document.querySelector('.hero-bottom-rail');
   const nav = document.querySelector('.nav');
 
-  if (
-    !hero ||
-    !video ||
-    !frame ||
-    !overline ||
-    !title ||
-    !scrollIndicator ||
-    !subtitle ||
-    !bgText ||
-    !details ||
-    !bottomRail ||
-    !nav
-  ) {
+  if (!hero || !video || !frame || !details || !nav) {
     console.warn('Hero elements missing, skipping hero animations');
     return;
   }
 
   try {
-    gsap.set(video, { scale: 1.12, opacity: 0 });
-    gsap.set(frame, { opacity: 0 });
-    gsap.set(nav, { y: -40, opacity: 0 });
-    gsap.set(bgText, { opacity: 0, y: 24 });
-    gsap.set([overline, title, scrollIndicator, subtitle], { y: 50, opacity: 0 });
-    gsap.set(bottomRail, { y: 30, opacity: 0 });
+    gsap.set(video, { scale: 1.08, opacity: 0, force3D: true });
+    gsap.set(frame, { opacity: 0, force3D: true });
+    gsap.set(nav, { y: -30, opacity: 0, force3D: true });
+    gsap.set(bgText, { opacity: 0, y: 20, force3D: true });
+    gsap.set([overline, title, scrollIndicator, subtitle].filter(Boolean), { y: 40, opacity: 0, force3D: true });
+    gsap.set(bottomRail, { y: 25, opacity: 0, force3D: true });
 
-    const timeline = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    const heroTl = gsap.timeline({ defaults: { ease: 'power2.out', force3D: true } });
 
-    timeline
-      .to(video, { scale: 1.03, opacity: 1, duration: 2.2, ease: 'power2.out' })
-      .to(frame, { opacity: 1, duration: 1 }, '-=1.8')
-      .to(nav, { y: 0, opacity: 1, duration: 0.9, ease: 'power4.out' }, '-=1.7')
-      .to(bgText, { y: 0, opacity: 1, duration: 1 }, '-=1.2')
-      .to(title, { y: 0, opacity: 1, duration: 0.95 }, '-=0.5')
-      .to(overline, { y: 0, opacity: 1, duration: 0.7 }, '<0.05')
-      .to(scrollIndicator, { y: 0, opacity: 1, duration: 0.7 }, '-=0.42')
-      .to(subtitle, { y: 0, opacity: 1, duration: 0.9 }, '-=0.35')
-      .to(bottomRail, { y: 0, opacity: 1, duration: 0.75 }, '-=0.35');
+    heroTl
+      .to(video, { scale: 1, opacity: 1, duration: 1.8 }, 0)
+      .to(frame, { opacity: 1, duration: 0.8 }, 0.5)
+      .to(nav, { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out' }, 0.6)
+      .to(bgText, { y: 0, opacity: 1, duration: 0.8 }, 1)
+      .to(title, { y: 0, opacity: 1, duration: 0.8 }, 1.2)
+      .to(overline, { y: 0, opacity: 1, duration: 0.6 }, 1.3)
+      .to(scrollIndicator, { y: 0, opacity: 1, duration: 0.6 }, 1.5)
+      .to(subtitle, { y: 0, opacity: 1, duration: 0.7 }, 1.5)
+      .to(bottomRail, { y: 0, opacity: 1, duration: 0.6 }, 1.7);
 
     gsap.to(video, {
-      scale: 1,
+      scale: 0.95,
       ease: 'none',
       scrollTrigger: {
         trigger: hero,
         start: 'top top',
-        end: 'bottom top',
-        scrub: true,
+        end: '+=800',
+        scrub: 1,
       },
     });
 
     gsap.to(details, {
-      y: -110,
+      y: -60,
+      opacity: 0,
       ease: 'none',
       scrollTrigger: {
         trigger: hero,
-        start: 'top top',
+        start: '10% top',
         end: 'bottom top',
-        scrub: true,
+        scrub: 1,
       },
     });
 
-    gsap.to(bgText, {
-      y: -80,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: hero,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: 1.2,
-      },
-    });
+    if (bgText) {
+      gsap.to(bgText, {
+        y: -50,
+        opacity: 0,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: '15% top',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      });
+    }
 
-    gsap.to(bottomRail, {
-      y: -36,
-      opacity: 0.35,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: hero,
-        start: 'top top',
-        end: 'bottom top',
-        scrub: true,
-      },
-    });
+    if (bottomRail) {
+      gsap.to(bottomRail, {
+        y: -20,
+        opacity: 0,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: hero,
+          start: '5% top',
+          end: 'bottom top',
+          scrub: 1,
+        },
+      });
+    }
 
     gsap.to(frame, {
-      opacity: 0.5,
+      opacity: 0.3,
       ease: 'none',
       scrollTrigger: {
         trigger: hero,
         start: 'top top',
         end: 'bottom top',
-        scrub: true,
+        scrub: 1,
       },
     });
   } catch (error) {
@@ -176,26 +174,26 @@ const initProductRevealAnimations = () => {
   }
 
   try {
-    gsap.set(watch, { opacity: 0, y: 50, rotation: -5 });
-    gsap.set([title, subtitle, cta], { opacity: 0, y: 50 });
+    gsap.set(watch, { opacity: 0, y: 40, rotation: -3, force3D: true });
+    gsap.set([title, subtitle, cta], { opacity: 0, y: 30, force3D: true });
 
     const revealTimeline = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: 'top 58%',
+        start: 'top 60%',
         toggleActions: 'play none none reverse',
       },
     });
 
     revealTimeline
-      .to(watch, { opacity: 1, y: 0, rotation: 0, duration: 1.2, ease: 'power4.out' })
-      .to(title, { opacity: 1, y: 0, duration: 0.8, ease: 'power3.out' }, '-=0.75')
-      .to(subtitle, { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out' }, '-=0.45')
-      .to(cta, { opacity: 1, y: 0, duration: 0.75, ease: 'power3.out' }, '-=0.45');
+      .to(watch, { opacity: 1, y: 0, rotation: 0, duration: 1, ease: 'power3.out' })
+      .to(title, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.6')
+      .to(subtitle, { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out' }, '-=0.4')
+      .to(cta, { opacity: 1, y: 0, duration: 0.65, ease: 'power2.out' }, '-=0.4');
 
     gsap.to(watch, {
-      rotation: 20,
-      scale: 1.3,
+      rotation: 15,
+      scale: 1.2,
       ease: 'none',
       scrollTrigger: {
         trigger: section,
@@ -206,24 +204,24 @@ const initProductRevealAnimations = () => {
     });
 
     gsap.to(details, {
-      y: -150,
+      y: -100,
       ease: 'none',
       scrollTrigger: {
         trigger: section,
         start: 'top top',
         end: 'bottom top',
-        scrub: true,
+        scrub: 1,
       },
     });
 
     gsap.to(bgText, {
-      y: -250,
+      y: -180,
       ease: 'none',
       scrollTrigger: {
         trigger: section,
         start: 'top top',
         end: 'bottom top',
-        scrub: true,
+        scrub: 1,
       },
     });
   } catch (error) {
@@ -245,14 +243,14 @@ const initEthosAnimations = () => {
   try {
     bgImages.forEach((image) => {
       gsap.to(image, {
-        scale: 1.1,
-        yPercent: 10,
+        scale: 1.08,
+        yPercent: 8,
         ease: 'none',
         scrollTrigger: {
           trigger: section,
           start: 'top bottom',
           end: 'bottom top',
-          scrub: true,
+          scrub: 1,
         },
       });
     });
@@ -261,19 +259,19 @@ const initEthosAnimations = () => {
       const textChildren = panel.querySelectorAll('.ethos-text-side > *');
       const watch = panel.querySelector('.ethos-watch-img');
 
-      gsap.set(textChildren, { x: 80, opacity: 0 });
-      gsap.set(watch, { x: 150, opacity: 0, rotation: 4 });
+      gsap.set(textChildren, { x: 60, opacity: 0, force3D: true });
+      gsap.set(watch, { x: 100, opacity: 0, rotation: 3, force3D: true });
 
       gsap
         .timeline()
         .to(textChildren, {
           x: 0,
           opacity: 1,
-          duration: 0.75,
-          stagger: 0.08,
-          ease: 'power3.out',
+          duration: 0.6,
+          stagger: 0.06,
+          ease: 'power2.out',
         })
-        .to(watch, { x: 0, opacity: 1, rotation: 0, duration: 1, ease: 'power4.out' }, '-=0.55');
+        .to(watch, { x: 0, opacity: 1, rotation: 0, duration: 0.8, ease: 'power3.out' }, '-=0.4');
     };
 
     const activePanel = document.querySelector('.ethos-main.active');
@@ -304,8 +302,8 @@ const initEthosAnimations = () => {
         const nextTextChildren = nextPanel.querySelectorAll('.ethos-text-side > *');
         const nextWatch = nextPanel.querySelector('.ethos-watch-img');
 
-        gsap.set(nextTextChildren, { x: 100, opacity: 0 });
-        gsap.set(nextWatch, { x: 150, opacity: 0, rotation: 4 });
+        gsap.set(nextTextChildren, { x: 80, opacity: 0, force3D: true });
+        gsap.set(nextWatch, { x: 100, opacity: 0, rotation: 3, force3D: true });
 
         gsap
           .timeline({
@@ -314,13 +312,13 @@ const initEthosAnimations = () => {
             },
           })
           .to(currentTextChildren, {
-            x: -100,
+            x: -80,
             opacity: 0,
-            duration: 0.45,
-            stagger: 0.04,
+            duration: 0.35,
+            stagger: 0.03,
             ease: 'power2.inOut',
           })
-          .to(currentWatch, { x: -150, opacity: 0, duration: 0.55, ease: 'power2.inOut' }, '<')
+          .to(currentWatch, { x: -100, opacity: 0, duration: 0.4, ease: 'power2.inOut' }, '<')
           .add(() => {
             currentPanel.classList.remove('active');
             nextPanel.classList.add('active');
@@ -330,11 +328,11 @@ const initEthosAnimations = () => {
           .to(nextTextChildren, {
             x: 0,
             opacity: 1,
-            duration: 0.7,
-            stagger: 0.06,
-            ease: 'power3.out',
+            duration: 0.55,
+            stagger: 0.05,
+            ease: 'power2.out',
           })
-          .to(nextWatch, { x: 0, opacity: 1, rotation: 0, duration: 0.9, ease: 'power4.out' }, '-=0.55');
+          .to(nextWatch, { x: 0, opacity: 1, rotation: 0, duration: 0.7, ease: 'power3.out' }, '-=0.4');
       });
     });
   } catch (error) {
@@ -369,24 +367,24 @@ const initDismantleAnimations = () => {
     clearCanvas();
     const gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height);
     gradient.addColorStop(0, '#0a0a0a');
-    gradient.addColorStop(0.5, '#141018');
-    gradient.addColorStop(1, '#060606');
+    gradient.addColorStop(0.5, '#121018');
+    gradient.addColorStop(1, '#050505');
     context.fillStyle = gradient;
     context.fillRect(0, 0, canvas.width, canvas.height);
 
-    context.strokeStyle = 'rgba(214, 178, 123, 0.3)';
-    context.lineWidth = 2;
+    context.strokeStyle = 'rgba(201, 169, 124, 0.25)';
+    context.lineWidth = 1.5;
     context.strokeRect(canvas.width * 0.15, canvas.height * 0.2, canvas.width * 0.7, canvas.height * 0.6);
 
-    context.fillStyle = 'rgba(255, 255, 255, 0.9)';
-    context.font = '600 42px Outfit, sans-serif';
+    context.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    context.font = '500 36px Outfit, sans-serif';
     context.textAlign = 'center';
     context.textBaseline = 'middle';
-    context.fillText('CRAFTSMANSHIP', canvas.width / 2, canvas.height / 2 - 20);
+    context.fillText('CRAFTSMANSHIP', canvas.width / 2, canvas.height / 2 - 15);
 
-    context.fillStyle = 'rgba(255, 255, 255, 0.5)';
-    context.font = '400 20px Inter, sans-serif';
-    context.fillText('Mechanical precision through every component', canvas.width / 2, canvas.height / 2 + 30);
+    context.fillStyle = 'rgba(255, 255, 255, 0.4)';
+    context.font = '300 16px Inter, sans-serif';
+    context.fillText('Mechanical precision through every component', canvas.width / 2, canvas.height / 2 + 25);
   };
 
   const drawImageContain = (image) => {
@@ -449,7 +447,7 @@ const initDismantleAnimations = () => {
     });
 
     gsap.to(header, {
-      x: -150,
+      x: -120,
       opacity: 0,
       ease: 'power2.in',
       scrollTrigger: {
@@ -492,6 +490,7 @@ const initNavScroll = () => {
   }
 
   let lastScroll = 0;
+  let navTween = null;
 
   lenis.on('scroll', ({ scroll }) => {
     if (nav.classList.contains('is-open')) {
@@ -499,16 +498,16 @@ const initNavScroll = () => {
       return;
     }
 
-    if (scroll <= 20) {
-      gsap.to(nav, { yPercent: 0, duration: 0.35, ease: 'power2.out', overwrite: true });
+    if (scroll <= 10) {
+      gsap.to(nav, { yPercent: 0, duration: 0.3, ease: 'power2.out', overwrite: true });
       lastScroll = scroll;
       return;
     }
 
-    if (scroll > lastScroll + 4) {
-      gsap.to(nav, { yPercent: -120, duration: 0.35, ease: 'power2.out', overwrite: true });
-    } else if (scroll < lastScroll - 4) {
-      gsap.to(nav, { yPercent: 0, duration: 0.35, ease: 'power2.out', overwrite: true });
+    if (scroll > lastScroll + 5) {
+      gsap.to(nav, { yPercent: -100, duration: 0.25, ease: 'power2.out', overwrite: true });
+    } else if (scroll < lastScroll - 5) {
+      gsap.to(nav, { yPercent: 0, duration: 0.25, ease: 'power2.out', overwrite: true });
     }
 
     lastScroll = scroll;
@@ -567,7 +566,7 @@ const initModal = () => {
 
       event.preventDefault();
       closeNavMenu();
-      lenis.scrollTo(target, { offset: -96, duration: 1.2 });
+      lenis.scrollTo(target, { offset: -80, duration: 1 });
       if (modal.classList.contains('active')) closeModal();
     });
   });
@@ -583,7 +582,7 @@ const initModal = () => {
       const originalText = submitBtn.textContent;
       submitBtn.textContent = 'Thank You!';
       submitBtn.disabled = true;
-      submitBtn.style.background = 'linear-gradient(180deg, #d6b27b 0%, #cb9550 100%)';
+      submitBtn.style.background = 'linear-gradient(180deg, #c9a97c 0%, #b8945e 100%)';
 
       setTimeout(() => {
         form.reset();
