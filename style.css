@@ -173,11 +173,16 @@ p {
   padding-inline: 0.15rem;
 }
 
-.nav-logo-img,
+.nav-logo-img {
+  width: auto;
+  height: 30px;
+  object-fit: contain;
+}
+
 .footer-logo {
   width: auto;
-  height: 24px;
-  filter: brightness(0) invert(1);
+  height: 28px;
+  object-fit: contain;
 }
 
 .nav-panel {
