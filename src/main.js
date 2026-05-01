@@ -289,6 +289,24 @@ const initCraft = () => {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
+  const resizeCanvas = () => {
+    const rect = canvas.parentElement.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    const w = Math.round(rect.width * dpr);
+    const h = Math.round(rect.height * dpr);
+    canvas.width = w;
+    canvas.height = h;
+    canvas.style.width = `${rect.width}px`;
+    canvas.style.height = `${rect.height}px`;
+  };
+
+  resizeCanvas();
+  window.addEventListener('resize', () => {
+    resizeCanvas();
+    render();
+    ScrollTrigger.refresh();
+  });
+
   const totalFrames = 40;
   const images = [];
   const sequence = { frame: 0 };
@@ -305,23 +323,28 @@ const initCraft = () => {
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+    const fontSize = Math.round(canvas.height * 0.03);
+    const subFontSize = Math.round(canvas.height * 0.014);
+
     ctx.strokeStyle = 'rgba(201, 169, 124, 0.25)';
-    ctx.lineWidth = 1.5;
+    ctx.lineWidth = Math.max(1, canvas.width * 0.001);
     ctx.strokeRect(canvas.width * 0.15, canvas.height * 0.2, canvas.width * 0.7, canvas.height * 0.6);
 
     ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-    ctx.font = '500 36px Outfit, sans-serif';
+    ctx.font = `500 ${fontSize}px Outfit, sans-serif`;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
     ctx.fillText('CRAFTSMANSHIP', canvas.width / 2, canvas.height / 2 - 15);
 
     ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
-    ctx.font = '300 16px Inter, sans-serif';
+    ctx.font = `300 ${subFontSize}px Inter, sans-serif`;
     ctx.fillText('Mechanical precision through every component', canvas.width / 2, canvas.height / 2 + 25);
   };
 
   const drawImage = (img) => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = 'high';
     if (!img || !img.complete || !img.naturalWidth) {
       drawFallback();
       return;
